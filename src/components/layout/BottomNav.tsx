@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,7 +17,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-neutral-900 border-t border-neutral-800 pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 pb-safe">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-2">
         {tabs.map(({ href, icon: Icon, label }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
@@ -27,12 +27,12 @@ export function BottomNav() {
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] rounded-xl transition-all",
+                "flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] transition-all",
                 isRecord
-                  ? "bg-orange-500 text-white p-2 scale-110 shadow-lg shadow-orange-500/30"
+                  ? "bg-[#FC5200] text-white p-2 rounded-sm scale-110 shadow-lg"
                   : active
-                  ? "text-orange-400"
-                  : "text-neutral-500 hover:text-neutral-300"
+                  ? "text-[#FC5200]"
+                  : "text-gray-400 hover:text-[#353633]"
               )}
             >
               <Icon size={isRecord ? 22 : 20} strokeWidth={active || isRecord ? 2.5 : 1.8} />
@@ -46,4 +46,3 @@ export function BottomNav() {
     </nav>
   );
 }
-
