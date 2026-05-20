@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,9 +29,9 @@ export function BottomNav() {
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 min-w-[44px] min-h-[44px] rounded-xl transition-all",
                 isRecord
-                  ? "bg-emerald-500 text-white p-2 scale-110 shadow-lg shadow-emerald-500/30"
+                  ? "bg-orange-500 text-white p-2 scale-110 shadow-lg shadow-orange-500/30"
                   : active
-                  ? "text-emerald-400"
+                  ? "text-orange-400"
                   : "text-neutral-500 hover:text-neutral-300"
               )}
             >
@@ -46,3 +46,4 @@ export function BottomNav() {
     </nav>
   );
 }
+

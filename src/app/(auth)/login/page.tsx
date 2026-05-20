@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -32,7 +32,7 @@ export default function LoginPage() {
     <div className="flex flex-col gap-8">
       <div className="text-center">
         <div className="inline-flex items-center gap-2 mb-4">
-          <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
             <BookOpen size={20} className="text-white" />
           </div>
           <span className="text-2xl font-bold tracking-tight">ReadStrava</span>
@@ -54,7 +54,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-orange-500 transition-colors"
             placeholder="seu@email.com"
           />
         </div>
@@ -66,7 +66,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-orange-500 transition-colors"
             placeholder="••••••••"
           />
         </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors mt-2"
+          className="bg-orange-500 hover:bg-orange-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors mt-2"
         >
           {loading ? "Entrando..." : "Entrar"}
         </button>
@@ -82,10 +82,11 @@ export default function LoginPage() {
 
       <p className="text-center text-sm text-neutral-500">
         Não tem conta?{" "}
-        <Link href="/register" className="text-emerald-400 hover:text-emerald-300 font-medium">
+        <Link href="/register" className="text-orange-400 hover:text-orange-300 font-medium">
           Criar conta
         </Link>
       </p>
     </div>
   );
 }
+

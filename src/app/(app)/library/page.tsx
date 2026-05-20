@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/useApi";
@@ -16,7 +16,7 @@ const STATUS_LABELS: Record<BookStatus, string> = {
 };
 
 const STATUS_COLORS: Record<BookStatus, string> = {
-  READING: "text-emerald-400",
+  READING: "text-orange-400",
   COMPLETED: "text-blue-400",
   PAUSED: "text-yellow-400",
   WISHLIST: "text-neutral-400",
@@ -79,7 +79,7 @@ export default function LibraryPage() {
         <h1 className="font-bold text-xl">Biblioteca</h1>
         <button
           onClick={() => setShowAdd(true)}
-          className="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center"
+          className="w-9 h-9 bg-orange-500 rounded-xl flex items-center justify-center"
         >
           <Plus size={18} className="text-white" />
         </button>
@@ -91,7 +91,7 @@ export default function LibraryPage() {
             key={s}
             onClick={() => setFilter(s)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === s ? "bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
+              filter === s ? "bg-orange-500 text-white" : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
             }`}
           >
             {s === "" ? "Todos" : STATUS_LABELS[s]}
@@ -112,7 +112,7 @@ export default function LibraryPage() {
           <p className="text-sm text-neutral-500 mb-6">Adicione seu primeiro livro</p>
           <button
             onClick={() => setShowAdd(true)}
-            className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl px-6 py-3 transition-colors"
+            className="inline-block bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl px-6 py-3 transition-colors"
           >
             Adicionar livro
           </button>
@@ -130,7 +130,7 @@ export default function LibraryPage() {
                   </div>
                 )}
                 <div className="absolute bottom-2 right-2 bg-neutral-900/90 rounded-lg px-2 py-1">
-                  <p className="text-xs font-bold text-emerald-400">{b.progressPercent ?? 0}%</p>
+                  <p className="text-xs font-bold text-orange-400">{b.progressPercent ?? 0}%</p>
                 </div>
               </div>
               <div className="p-3">
@@ -141,7 +141,7 @@ export default function LibraryPage() {
                 </p>
                 {b.status === "READING" && (
                   <div className="mt-2 bg-neutral-800 rounded-full h-1">
-                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${b.progressPercent ?? 0}%` }} />
+                    <div className="bg-orange-500 h-full rounded-full" style={{ width: `${b.progressPercent ?? 0}%` }} />
                   </div>
                 )}
               </div>
@@ -167,7 +167,7 @@ export default function LibraryPage() {
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); doSearch(e.target.value); }}
                 placeholder="Buscar por título ou autor..."
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-neutral-600 focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl pl-10 pr-4 py-3 text-white placeholder-neutral-600 focus:border-orange-500 focus:outline-none"
               />
             </div>
 
@@ -177,7 +177,7 @@ export default function LibraryPage() {
                   key={s}
                   onClick={() => setAddStatus(s)}
                   className={`flex-1 py-2 rounded-xl text-xs font-semibold transition-colors ${
-                    addStatus === s ? "bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-400"
+                    addStatus === s ? "bg-orange-500 text-white" : "bg-neutral-800 text-neutral-400"
                   }`}
                 >
                   {STATUS_LABELS[s]}
@@ -217,3 +217,4 @@ export default function LibraryPage() {
     </div>
   );
 }
+

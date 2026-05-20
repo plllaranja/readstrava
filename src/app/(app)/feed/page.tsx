@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useApi } from "@/hooks/useApi";
@@ -50,7 +50,7 @@ export default function FeedPage() {
     <div>
       <header className="sticky top-0 z-10 bg-neutral-950/90 backdrop-blur-sm border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center">
+          <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center">
             <BookOpen size={14} className="text-white" />
           </div>
           <span className="font-bold text-lg">ReadStrava</span>
@@ -68,7 +68,7 @@ export default function FeedPage() {
             <p className="text-sm text-neutral-500 mb-6">Siga outros leitores ou registre sua primeira sessão</p>
             <Link
               href="/record"
-              className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl px-6 py-3 transition-colors"
+              className="inline-block bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl px-6 py-3 transition-colors"
             >
               Registrar leitura
             </Link>
@@ -79,7 +79,7 @@ export default function FeedPage() {
               <SessionCard key={s.id} session={s} />
             ))}
             <div ref={loaderRef} className="h-8 flex items-center justify-center">
-              {hasMore && <div className="w-5 h-5 border-2 border-neutral-700 border-t-emerald-500 rounded-full animate-spin" />}
+              {hasMore && <div className="w-5 h-5 border-2 border-neutral-700 border-t-orange-500 rounded-full animate-spin" />}
             </div>
           </>
         )}
@@ -87,3 +87,4 @@ export default function FeedPage() {
     </div>
   );
 }
+

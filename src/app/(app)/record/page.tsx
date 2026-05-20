@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useApi } from "@/hooks/useApi";
@@ -108,7 +108,7 @@ export default function RecordPage() {
           <button
             onClick={() => setMode("timer")}
             className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-colors ${
-              mode === "timer" ? "bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-300"
+              mode === "timer" ? "bg-orange-500 text-white" : "bg-neutral-800 text-neutral-300"
             }`}
           >
             ⏱ Timer
@@ -116,7 +116,7 @@ export default function RecordPage() {
           <button
             onClick={() => setMode("manual")}
             className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-colors ${
-              mode === "manual" ? "bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-300"
+              mode === "manual" ? "bg-orange-500 text-white" : "bg-neutral-800 text-neutral-300"
             }`}
           >
             ✏️ Manual
@@ -128,7 +128,7 @@ export default function RecordPage() {
           {books.length === 0 ? (
             <div className="bg-neutral-900 rounded-xl p-4 text-center text-sm text-neutral-500">
               Nenhum livro em leitura.{" "}
-              <a href="/library" className="text-emerald-400">Adicionar livro</a>
+              <a href="/library" className="text-orange-400">Adicionar livro</a>
             </div>
           ) : (
             <div className="flex flex-col gap-2">
@@ -138,7 +138,7 @@ export default function RecordPage() {
                   onClick={() => setSelectedBook(b)}
                   className={`flex items-center gap-3 p-3 rounded-xl border transition-colors text-left ${
                     selectedBook?.id === b.id
-                      ? "border-emerald-500 bg-emerald-500/10"
+                      ? "border-orange-500 bg-orange-500/10"
                       : "border-neutral-800 bg-neutral-900 hover:border-neutral-700"
                   }`}
                 >
@@ -156,7 +156,7 @@ export default function RecordPage() {
                     <p className="text-xs text-neutral-500">{b.author}</p>
                     <div className="mt-1 bg-neutral-800 rounded-full h-1.5 w-full">
                       <div
-                        className="bg-emerald-500 h-full rounded-full"
+                        className="bg-orange-500 h-full rounded-full"
                         style={{ width: `${b.progressPercent ?? 0}%` }}
                       />
                     </div>
@@ -179,7 +179,7 @@ export default function RecordPage() {
                   onChange={(e) => setStartPage(e.target.value)}
                   min={0}
                   max={selectedBook.totalPages}
-                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
                   placeholder={`${selectedBook.pagesRead ?? 0}`}
                 />
               </div>
@@ -192,7 +192,7 @@ export default function RecordPage() {
                     onChange={(e) => setEndPage(e.target.value)}
                     min={0}
                     max={selectedBook.totalPages}
-                    className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
                   />
                 </div>
               )}
@@ -201,7 +201,7 @@ export default function RecordPage() {
             <button
               onClick={mode === "timer" ? startTimer : undefined}
               disabled={submitting || !startPage || (mode === "manual" && !endPage)}
-              className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-4 text-lg transition-colors"
+              className="w-full bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-4 text-lg transition-colors"
             >
               {mode === "timer" ? "▶ Iniciar timer" : "Registrar sessão"}
             </button>
@@ -252,10 +252,10 @@ export default function RecordPage() {
                 type="number"
                 value={endPage}
                 onChange={(e) => setEndPage(e.target.value)}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none"
               />
             </div>
-            <button onClick={stopTimer} disabled={submitting || !endPage} className="w-full bg-emerald-500 text-white font-bold rounded-xl py-4">
+            <button onClick={stopTimer} disabled={submitting || !endPage} className="w-full bg-orange-500 text-white font-bold rounded-xl py-4">
               Finalizar sessão
             </button>
           </div>
@@ -266,3 +266,4 @@ export default function RecordPage() {
 
   return null;
 }
+

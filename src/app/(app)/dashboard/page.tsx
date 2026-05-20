@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/useApi";
@@ -20,10 +20,10 @@ function Heatmap({ data }: { data: Record<string, number> }) {
   const intensity = (pages: number) => {
     if (pages === 0) return "bg-neutral-800";
     const p = pages / max;
-    if (p < 0.25) return "bg-emerald-900";
-    if (p < 0.5) return "bg-emerald-700";
-    if (p < 0.75) return "bg-emerald-500";
-    return "bg-emerald-400";
+    if (p < 0.25) return "bg-orange-900";
+    if (p < 0.5) return "bg-orange-700";
+    if (p < 0.75) return "bg-orange-500";
+    return "bg-orange-400";
   };
 
   return (
@@ -83,7 +83,7 @@ export default function DashboardPage() {
           ].map(({ label, pages, time, icon: Icon }) => (
             <div key={label} className="bg-neutral-900 rounded-2xl p-4 border border-neutral-800">
               <div className="flex items-center gap-1.5 mb-2">
-                <Icon size={14} className="text-emerald-400" />
+                <Icon size={14} className="text-orange-400" />
                 <span className="text-xs text-neutral-400">{label}</span>
               </div>
               <p className="text-2xl font-bold">{formatPages(pages ?? 0)}</p>
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           <Heatmap data={heatmap ?? {}} />
           <div className="flex items-center gap-2 mt-3 text-xs text-neutral-600">
             <span>menos</span>
-            {["bg-neutral-800", "bg-emerald-900", "bg-emerald-700", "bg-emerald-500", "bg-emerald-400"].map((c, i) => (
+            {["bg-neutral-800", "bg-orange-900", "bg-orange-700", "bg-orange-500", "bg-orange-400"].map((c, i) => (
               <div key={i} className={`w-3 h-3 rounded-sm ${c}`} />
             ))}
             <span>mais</span>
@@ -156,3 +156,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

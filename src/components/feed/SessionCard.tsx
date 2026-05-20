@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +54,7 @@ export function SessionCard({ session: s }: SessionCardProps) {
             </div>
           </Link>
           <div className="flex-1 min-w-0">
-            <Link href={`/profile/${s.user.username}`} className="font-semibold text-sm hover:text-emerald-400 transition-colors">
+            <Link href={`/profile/${s.user.username}`} className="font-semibold text-sm hover:text-orange-400 transition-colors">
               {s.user.name}
             </Link>
             <p className="text-xs text-neutral-500">{s.endedAt ? timeAgo(s.endedAt) : ""}</p>
@@ -71,13 +71,13 @@ export function SessionCard({ session: s }: SessionCardProps) {
         </div>
 
         <Link href={`/library/${s.book.id}`} className="block mb-3">
-          <p className="font-semibold text-sm leading-tight hover:text-emerald-400 transition-colors">{s.book.title}</p>
+          <p className="font-semibold text-sm leading-tight hover:text-orange-400 transition-colors">{s.book.title}</p>
           <p className="text-xs text-neutral-500">{s.book.author}</p>
         </Link>
 
         <div className="grid grid-cols-3 gap-2 mb-3">
           <div className="bg-neutral-800 rounded-xl p-2.5 text-center">
-            <p className="text-lg font-bold text-emerald-400">{s.pagesRead ?? 0}</p>
+            <p className="text-lg font-bold text-orange-400">{s.pagesRead ?? 0}</p>
             <p className="text-[10px] text-neutral-500 uppercase tracking-wide">páginas</p>
           </div>
           <div className="bg-neutral-800 rounded-xl p-2.5 text-center">
@@ -91,7 +91,7 @@ export function SessionCard({ session: s }: SessionCardProps) {
         </div>
 
         {s.highlight && (
-          <blockquote className="border-l-2 border-emerald-500 pl-3 mb-3">
+          <blockquote className="border-l-2 border-orange-500 pl-3 mb-3">
             <p className="text-sm text-neutral-300 italic line-clamp-2">"{s.highlight}"</p>
           </blockquote>
         )}
@@ -107,7 +107,7 @@ export function SessionCard({ session: s }: SessionCardProps) {
         <button
           onClick={toggleKudos}
           className={`flex items-center gap-1.5 text-sm font-medium transition-colors min-h-[44px] px-1 ${
-            kudosed ? "text-emerald-400" : "text-neutral-500 hover:text-neutral-300"
+            kudosed ? "text-orange-400" : "text-neutral-500 hover:text-neutral-300"
           }`}
         >
           <BookmarkIcon size={18} fill={kudosed ? "currentColor" : "none"} />
@@ -124,3 +124,4 @@ export function SessionCard({ session: s }: SessionCardProps) {
     </article>
   );
 }
+
