@@ -1,0 +1,253 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  username      String    @unique
+  email         String    @unique
+  passwordHash  String
+  name          String
+  avatarUrl     String?
+  bio           String?
+  isPublic      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  books             Book[]
+  sessions          ReadingSession[]
+  achievements      Achievement[]
+  kudosGiven        Kudos[]         @relation("KudosGiver")
+  comments          Comment[]
+  following         Follow[]        @relation("Follower")
+  followers         Follow[]        @relation("Following")
+  clubMemberships   ClubMember[]
+  challengeEntries  ChallengeParticipant[]
+  createdClubs      Club[]          @relation("ClubCreator")
+  readingLists      ReadingList[]
+  refreshTokens     RefreshToken[]
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+model Book {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  author        String
+  publisher     String?
+  totalPages    Int
+  coverUrl      String?
+  isbn          String?
+  genre         String?
+  status        BookStatus  @default(READING)
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  rating        Int?
+  review        String?
+  googleBooksId String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  sessions  ReadingSession[]
+  listItems ReadingListItem[]
+
+  @@map("books")
+}
+
+enum BookStatus {
+  READING
+  COMPLETED
+  PAUSED
+  WISHLIST
+}
+
+model ReadingSession {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId          String
+  book            Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  startedAt       DateTime
+  endedAt         DateTime?
+  startPage       Int
+  endPage         Int?
+  pagesRead       Int?
+  durationSeconds Int?
+  pacePerHour     Float?
+  photoUrl        String?
+  mood            Int?
+  locationTag     String?
+  highlight       String?
+  isActive        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  kudos    Kudos[]
+  comments Comment[]
+
+  @@map("reading_sessions")
+}
+
+model Achievement {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       String
+  unlockedAt DateTime @default(now())
+  metadata   Json?
+
+  @@unique([userId, type])
+  @@map("achievements")
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@id([followerId, followingId])
+  @@map("follows")
+}
+
+model Kudos {
+  id        String         @id @default(uuid())
+  sessionId String
+  session   ReadingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation("KudosGiver", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([sessionId, userId])
+  @@map("kudos")
+}
+
+model Comment {
+  id        String         @id @default(uuid())
+  sessionId String
+  session   ReadingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("comments")
+}
+
+model Club {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  coverUrl    String?
+  isPublic    Boolean  @default(true)
+  createdById String
+  createdBy   User     @relation("ClubCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members    ClubMember[]
+  challenges Challenge[]
+
+  @@map("clubs")
+}
+
+model ClubMember {
+  clubId   String
+  userId   String
+  club     Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     String   @default("member")
+  joinedAt DateTime @default(now())
+
+  @@id([clubId, userId])
+  @@map("club_members")
+}
+
+model Challenge {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  goalType    String
+  goalValue   Int
+  startsAt    DateTime
+  endsAt      DateTime
+  isPublic    Boolean   @default(true)
+  clubId      String?
+  club        Club?     @relation(fields: [clubId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+
+  participants ChallengeParticipant[]
+
+  @@map("challenges")
+}
+
+model ChallengeParticipant {
+  challengeId String
+  userId      String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress    Int       @default(0)
+  completedAt DateTime?
+  joinedAt    DateTime  @default(now())
+
+  @@id([challengeId, userId])
+  @@map("challenge_participants")
+}
+
+model ReadingList {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items ReadingListItem[]
+
+  @@map("reading_lists")
+}
+
+model ReadingListItem {
+  id      String      @id @default(uuid())
+  listId  String
+  list    ReadingList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  bookId  String
+  book    Book        @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  addedAt DateTime    @default(now())
+
+  @@unique([listId, bookId])
+  @@map("reading_list_items")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  data      Json
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
