@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { hash } from "argon2";
+import { hashSync as hash } from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { signAccessToken, signRefreshToken } from "@/lib/auth";
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const passwordHash = await hash(password);
+  const passwordHash = hash(password, 12);
 
   const user = await prisma.user.create({
     data: {

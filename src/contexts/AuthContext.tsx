@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, password }),
     });
     if (!res.ok) {
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       throw new Error(data.error ?? "Erro ao fazer login");
     }
     const data = await res.json();
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify(formData),
     });
     if (!res.ok) {
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       throw new Error(data.error ?? "Erro ao criar conta");
     }
     const data = await res.json();

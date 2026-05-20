@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verify } from "argon2";
+import { compareSync as verify } from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { signAccessToken, signRefreshToken } from "@/lib/auth";
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 });
   }
 
-  const valid = await verify(user.passwordHash, password);
+  const valid = verify(password, user.passwordHash);
   if (!valid) {
     return NextResponse.json({ error: "Credenciais inválidas" }, { status: 401 });
   }
