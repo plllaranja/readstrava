@@ -23,6 +23,8 @@ export default function RecordPage() {
   const [mood, setMood] = useState<number | null>(null);
   const [location, setLocation] = useState("");
   const [highlight, setHighlight] = useState("");
+  const [durationHours, setDurationHours] = useState("");
+  const [durationMinutes, setDurationMinutes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -79,6 +81,7 @@ export default function RecordPage() {
   const submitManual = async () => {
     if (!selectedBook || !startPage || !endPage) return;
     setSubmitting(true);
+    const totalSeconds = (parseInt(durationHours || "0") * 3600) + (parseInt(durationMinutes || "0") * 60);
     const res = await request("/api/sessions", {
       method: "POST",
       body: JSON.stringify({
@@ -86,6 +89,7 @@ export default function RecordPage() {
         startPage: parseInt(startPage),
         endPage: parseInt(endPage),
         startedAt: new Date().toISOString(),
+        durationSeconds: totalSeconds > 0 ? totalSeconds : undefined,
         mood: mood ?? undefined,
         locationTag: location || undefined,
         highlight: highlight || undefined,
@@ -196,6 +200,38 @@ export default function RecordPage() {
                 </div>
               )}
             </div>
+
+            {mode === "manual" && (
+              <div>
+                <label className="text-sm font-medium text-neutral-300 block mb-1.5">Tempo de leitura (opcional)</label>
+                <div className="flex gap-3">
+                  <div className="flex-1 relative">
+                    <input
+                      type="number"
+                      value={durationHours}
+                      onChange={(e) => setDurationHours(e.target.value)}
+                      min={0}
+                      max={23}
+                      placeholder="0"
+                      className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none pr-14"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-neutral-500">horas</span>
+                  </div>
+                  <div className="flex-1 relative">
+                    <input
+                      type="number"
+                      value={durationMinutes}
+                      onChange={(e) => setDurationMinutes(e.target.value)}
+                      min={0}
+                      max={59}
+                      placeholder="0"
+                      className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none pr-14"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-neutral-500">min</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <button
               onClick={mode === "timer" ? startTimer : submitManual}
