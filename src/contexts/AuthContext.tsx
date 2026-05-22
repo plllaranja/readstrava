@@ -17,6 +17,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<string | null>;
+  updateUser: (updates: Partial<AuthUser>) => void;
 }
 
 interface RegisterData {
@@ -125,8 +126,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearSession();
   };
 
+  const updateUser = (updates: Partial<AuthUser>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem(STORAGE_USER, JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, accessToken, loading, login, register, logout, refreshToken }}>
+    <AuthContext.Provider value={{ user, accessToken, loading, login, register, logout, refreshToken, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,6 +13,16 @@ const stopTimerSchema = z.object({
   highlight: z.string().max(1000).optional().nullable(),
 });
 
+const editSchema = z.object({
+  action: z.literal("edit"),
+  startPage: z.number().int().min(0),
+  endPage: z.number().int().min(0),
+  durationSeconds: z.number().int().min(0).nullable(),
+  mood: z.number().int().min(1).max(5).optional().nullable(),
+  locationTag: z.enum(["home", "cafe", "transit", "other"]).optional().nullable(),
+  highlight: z.string().max(1000).optional().nullable(),
+});
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) {
   const user = await getAuthUser(req);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -44,6 +54,34 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ se
   if (!session) return NextResponse.json({ error: "Sessão não encontrada" }, { status: 404 });
 
   const body = await req.json().catch(() => null);
+
+  if (body?.action === "edit") {
+    const parsed = editSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Dados inválidos", details: parsed.error.flatten() }, { status: 400 });
+    }
+    const { startPage, endPage, durationSeconds, mood, locationTag, highlight } = parsed.data;
+    const pagesRead = Math.max(0, endPage - startPage);
+    const pacePerHour = durationSeconds && durationSeconds > 0 ? (pagesRead / durationSeconds) * 3600 : null;
+
+    const updated = await prisma.readingSession.update({
+      where: { id: sessionId },
+      data: {
+        startPage,
+        endPage,
+        pagesRead,
+        durationSeconds,
+        pacePerHour,
+        mood,
+        locationTag,
+        highlight: sanitizeOptional(highlight),
+      },
+      include: { book: { select: { id: true, title: true, author: true, coverUrl: true, totalPages: true } } },
+    });
+
+    return NextResponse.json({ session: updated });
+  }
+
   const parsed = stopTimerSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: "Dados inválidos", details: parsed.error.flatten() }, { status: 400 });
