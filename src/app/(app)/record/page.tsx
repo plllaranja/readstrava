@@ -76,8 +76,7 @@ export default function RecordPage() {
     setSubmitting(false);
   };
 
-  const submitManual = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitManual = async () => {
     if (!selectedBook || !startPage || !endPage) return;
     setSubmitting(true);
     const res = await request("/api/sessions", {
@@ -99,7 +98,7 @@ export default function RecordPage() {
     setSubmitting(false);
   };
 
-  if (mode === "select" || !selectedBook) {
+  if (!activeSession) {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-6">Registrar leitura</h1>
@@ -199,7 +198,7 @@ export default function RecordPage() {
             </div>
 
             <button
-              onClick={mode === "timer" ? startTimer : undefined}
+              onClick={mode === "timer" ? startTimer : submitManual}
               disabled={submitting || !startPage || (mode === "manual" && !endPage)}
               className="w-full bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-4 text-lg transition-colors"
             >

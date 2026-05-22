@@ -192,7 +192,7 @@ export default function LibraryPage() {
 
       {/* Modal */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={(e) => e.target === e.currentTarget && closeModal()}>
+        <div className="fixed inset-0 z-[60] bg-black/40 flex items-end" onClick={(e) => e.target === e.currentTarget && closeModal()}>
           <div className="bg-white w-full max-w-lg mx-auto rounded-t-xl shadow-xl" style={{ maxHeight: "90vh", overflowY: "auto" }}>
             {/* Header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100">
