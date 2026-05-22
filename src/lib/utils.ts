@@ -15,7 +15,10 @@ export function formatDuration(seconds: number): string {
 
 export function formatPace(pagesPerHour: number): string {
   if (pagesPerHour <= 0) return "—";
-  return `${Math.round(pagesPerHour)} pág/h`;
+  const minPerPage = 60 / pagesPerHour;
+  const min = Math.floor(minPerPage);
+  const sec = Math.round((minPerPage - min) * 60);
+  return `${min}:${sec.toString().padStart(2, "0")} /pág`;
 }
 
 export function formatPages(n: number): string {
