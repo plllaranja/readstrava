@@ -78,17 +78,18 @@ function CardCenter({ s, username }: { s: any; username?: string }) {
     { label: "Tempo total", value: s.durationSeconds ? formatDuration(s.durationSeconds) : "—" },
   ];
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#111" }}>
+    <div data-card-root className="relative w-full h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#111" }}>
       {s.book?.coverUrl && (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
+          data-bg
           src={s.book.coverUrl}
           alt=""
           crossOrigin="anonymous"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.25)", filter: "blur(20px)" }}
         />
       )}
-      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
+      <div data-bg style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "32px", textAlign: "center" }}>
         <div style={{ marginTop: 8 }}>
           <p style={{ color: "#fff", fontWeight: 800, fontSize: 22, lineHeight: 1.2, margin: 0 }}>{s.book?.title}</p>
@@ -119,13 +120,13 @@ function CardLeft({ s, username }: { s: any; username?: string }) {
     { label: "Tempo total", value: s.durationSeconds ? formatDuration(s.durationSeconds) : "—" },
   ];
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#111" }}>
+    <div data-card-root className="relative w-full h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#111" }}>
       {s.book?.coverUrl && (
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={s.book.coverUrl} alt="" crossOrigin="anonymous"
+        <img data-bg src={s.book.coverUrl} alt="" crossOrigin="anonymous"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.25)", filter: "blur(20px)" }} />
       )}
-      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
+      <div data-bg style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
       <div style={{ position: "relative", display: "flex", flexDirection: "column", height: "100%", padding: "32px" }}>
         <div style={{ marginTop: 8 }}>
           <p style={{ color: "#fff", fontWeight: 800, fontSize: 22, lineHeight: 1.2, margin: 0 }}>{s.book?.title}</p>
@@ -156,17 +157,18 @@ function CardBottom({ s, username }: { s: any; username?: string }) {
     { label: "Tempo", value: s.durationSeconds ? formatDuration(s.durationSeconds) : "—" },
   ];
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", backgroundColor: "#000", overflow: "hidden" }}>
+    <div data-card-root style={{ position: "relative", width: "100%", height: "100%", backgroundColor: "#000", overflow: "hidden" }}>
       {s.book?.coverUrl && (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
+          data-bg
           src={s.book.coverUrl}
           alt=""
           crossOrigin="anonymous"
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "65%", objectFit: "cover" }}
         />
       )}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #000 35%, rgba(0,0,0,0.3) 60%, transparent 100%)" }} />
+      <div data-bg style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #000 35%, rgba(0,0,0,0.3) 60%, transparent 100%)" }} />
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 32px 32px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
           {stats.map(({ label, value }) => (
@@ -195,9 +197,9 @@ function CardSide({ s, username }: { s: any; username?: string }) {
     { label: "Tempo total", value: s.durationSeconds ? formatDuration(s.durationSeconds) : "—" },
   ];
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", backgroundColor: "#111", display: "flex", overflow: "hidden" }}>
+    <div data-card-root style={{ position: "relative", width: "100%", height: "100%", backgroundColor: "#111", display: "flex", overflow: "hidden" }}>
       {/* Left: cover */}
-      <div style={{ width: "42%", position: "relative", overflow: "hidden" }}>
+      <div data-bg style={{ width: "42%", position: "relative", overflow: "hidden" }}>
         {s.book?.coverUrl ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
@@ -326,7 +328,22 @@ export default function SessionDetailPage() {
     setDownloading(true);
     try {
       const { toPng } = await import("html-to-image");
+
+      // Hide background elements
+      const bgEls = cardRef.current.querySelectorAll<HTMLElement>("[data-bg]");
+      bgEls.forEach((el) => { el.style.display = "none"; });
+
+      // Clear solid background colors
+      const rootEls = cardRef.current.querySelectorAll<HTMLElement>("[data-card-root]");
+      const prevBgs: string[] = [];
+      rootEls.forEach((el) => { prevBgs.push(el.style.backgroundColor); el.style.backgroundColor = "transparent"; });
+
       const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 3 });
+
+      // Restore
+      bgEls.forEach((el) => { el.style.display = ""; });
+      rootEls.forEach((el, i) => { el.style.backgroundColor = prevBgs[i]; });
+
       const a = document.createElement("a");
       a.download = `readstrava-${(s.book?.title ?? "sessao").replace(/\s+/g, "-").slice(0, 40)}.png`;
       a.href = dataUrl;
