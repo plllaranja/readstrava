@@ -78,14 +78,14 @@ function CardCenter({ s, username }: { s: any; username?: string }) {
         />
       )}
       <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
-      <div style={{ position: "relative", display: "flex", flexDirection: "column", height: "100%", padding: "32px" }}>
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", height: "100%", padding: "32px", textAlign: "center" }}>
         <div style={{ marginTop: 8 }}>
           <p style={{ color: "#fff", fontWeight: 800, fontSize: 22, lineHeight: 1.2, margin: 0 }}>{s.book?.title}</p>
           <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, marginTop: 4 }}>{s.book?.author}</p>
         </div>
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 28 }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 28, width: "100%" }}>
           {stats.map(({ label, value }) => (
-            <div key={label}>
+            <div key={label} style={{ textAlign: "center" }}>
               <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", margin: 0 }}>{label}</p>
               <p style={{ color: "#fff", fontWeight: 800, fontSize: 48, lineHeight: 1, margin: "4px 0 0" }}>{value}</p>
             </div>
