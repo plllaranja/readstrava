@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft, Send, BookOpen, Pencil, Trash2, X, Download } from "lucide-react";
 import { formatDuration, formatPace, timeAgo } from "@/lib/utils";
 
-type CardLayout = "center" | "bottom" | "side";
+type CardLayout = "center" | "left" | "bottom" | "side";
 
 const MOOD_ICONS = ["", "😴", "😐", "🙂", "😊", "🔥"];
 const LOCATIONS = [
@@ -26,6 +26,17 @@ const LAYOUTS: { id: CardLayout; label: string; preview: React.ReactNode }[] = [
         <div className="w-4 h-0.5 bg-neutral-400 rounded" />
         <div className="w-4 h-0.5 bg-neutral-400 rounded" />
         <div className="w-4 h-0.5 bg-neutral-400 rounded" />
+      </div>
+    ),
+  },
+  {
+    id: "left",
+    label: "Esquerda",
+    preview: (
+      <div className="w-8 h-12 rounded border border-neutral-600 overflow-hidden bg-neutral-800 flex flex-col justify-center gap-1 px-1.5">
+        <div className="w-5 h-0.5 bg-neutral-400 rounded" />
+        <div className="w-5 h-0.5 bg-neutral-400 rounded" />
+        <div className="w-5 h-0.5 bg-neutral-400 rounded" />
       </div>
     ),
   },
@@ -92,6 +103,43 @@ function CardCenter({ s, username }: { s: any; username?: string }) {
           ))}
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <span style={{ color: "#FC5200", fontSize: 20 }}>📖</span>
+          <span style={{ color: "#fff", fontWeight: 800, letterSpacing: "0.15em", fontSize: 13 }}>READSTRAVA</span>
+          {username && <span style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginLeft: 4 }}>• @{username}</span>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CardLeft({ s, username }: { s: any; username?: string }) {
+  const stats = [
+    { label: "Páginas lidas", value: String(s.pagesRead ?? 0) },
+    { label: "Pace", value: s.pacePerHour ? formatPace(s.pacePerHour) : "—" },
+    { label: "Tempo total", value: s.durationSeconds ? formatDuration(s.durationSeconds) : "—" },
+  ];
+  return (
+    <div className="relative w-full h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#111" }}>
+      {s.book?.coverUrl && (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={s.book.coverUrl} alt="" crossOrigin="anonymous"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.25)", filter: "blur(20px)" }} />
+      )}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)" }} />
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", height: "100%", padding: "32px" }}>
+        <div style={{ marginTop: 8 }}>
+          <p style={{ color: "#fff", fontWeight: 800, fontSize: 22, lineHeight: 1.2, margin: 0 }}>{s.book?.title}</p>
+          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, marginTop: 4 }}>{s.book?.author}</p>
+        </div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 28 }}>
+          {stats.map(({ label, value }) => (
+            <div key={label}>
+              <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", margin: 0 }}>{label}</p>
+              <p style={{ color: "#fff", fontWeight: 800, fontSize: 48, lineHeight: 1, margin: "4px 0 0" }}>{value}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: "#FC5200", fontSize: 20 }}>📖</span>
           <span style={{ color: "#fff", fontWeight: 800, letterSpacing: "0.15em", fontSize: 13 }}>READSTRAVA</span>
           {username && <span style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginLeft: 4 }}>• @{username}</span>}
@@ -335,6 +383,7 @@ export default function SessionDetailPage() {
             style={{ aspectRatio: "9/16" }}
           >
             {cardLayout === "center" && <CardCenter s={s} username={user?.username} />}
+            {cardLayout === "left" && <CardLeft s={s} username={user?.username} />}
             {cardLayout === "bottom" && <CardBottom s={s} username={user?.username} />}
             {cardLayout === "side" && <CardSide s={s} username={user?.username} />}
           </div>
