@@ -3,29 +3,34 @@ import { prisma } from "./prisma";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
-if (!JWT_SECRET || !REFRESH_SECRET) {
-  throw new Error("JWT_SECRET and REFRESH_SECRET must be set");
-}
-
 export interface JWTPayload {
   userId: string;
   username: string;
 }
 
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) throw new Error("JWT_SECRET must be set");
+  return secret;
+}
+
+function getRefreshSecret(): string {
+  const secret = process.env.REFRESH_SECRET;
+  if (!secret) throw new Error("REFRESH_SECRET must be set");
+  return secret;
+}
+
 export function signAccessToken(payload: JWTPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: "15m" });
 }
 
 export function signRefreshToken(payload: JWTPayload): string {
-  return jwt.sign(payload, REFRESH_SECRET, { expiresIn: "7d" });
+  return jwt.sign(payload, getRefreshSecret(), { expiresIn: "7d" });
 }
 
 export function verifyAccessToken(token: string): JWTPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as JWTPayload;
+    return jwt.verify(token, getJwtSecret()) as JWTPayload;
   } catch {
     return null;
   }
@@ -33,7 +38,7 @@ export function verifyAccessToken(token: string): JWTPayload | null {
 
 export function verifyRefreshToken(token: string): JWTPayload | null {
   try {
-    return jwt.verify(token, REFRESH_SECRET) as JWTPayload;
+    return jwt.verify(token, getRefreshSecret()) as JWTPayload;
   } catch {
     return null;
   }
